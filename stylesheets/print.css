@@ -50,12 +50,16 @@ body {
 
 a {
   font-weight: bold;
-  color: #d5000d;
+  color: #8cb168;
 }
 
 header {
   padding-top: 35px;
   padding-bottom: 10px;
+}
+
+header nav {
+  display: none;
 }
 
 header h1 {
@@ -112,13 +116,18 @@ table {
   border: 1px solid #ebebeb;
 }
 
+th, td {
+  padding: .5rem; 
+}
+
 th {
   font-weight: 500;
 }
 
 td {
   font-weight: 300;
-  text-align: center;
+  text-align: left;
+  vertical-align: top;
   border: 1px solid #ebebeb;
 }
 
@@ -146,7 +155,7 @@ h3 {
   margin-bottom: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: #d5000d;
+  color: #8cb168;
 }
 
 h4 {

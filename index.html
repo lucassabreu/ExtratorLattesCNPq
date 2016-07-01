@@ -13,60 +13,209 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <title>Extratorlattescnpq by lucassabreu</title>
+    <title>Extrator Lattes CNPq por lucassabreu</title>
   </head>
 
   <body>
     <header>
       <div class="inner">
-        <h1>Extratorlattescnpq</h1>
+        <h1>Extrator Lattes CNPq</h1>
         <h2>Extrator em C# para tratar a leitura de currículos XML da Plataforma Lattes do CNPq e alimentá-los em uma base de dados SQL para fins de consulta.</h2>
         <a href="https://github.com/lucassabreu/ExtratorLattesCNPq" class="button"><small>View project on</small> GitHub</a>
+        <nav>
+          <ul>
+            <li><a href="#conceito">Conceito</a></li>
+            <li><a href="#execução">Execução</a></li>
+            <li><a href="#instalação-e-configuração">Instalação e Configuração</a></li>
+            <li><a href="#licença-e-distribuição">Licença e Distribuição</a></li>
+          </ul>
+        </nav>
       </div>
     </header>
 
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          <h1>
+<a id="extrator-lattes-cnpq" class="anchor" href="#extrator-lattes-cnpq" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Extrator Lattes CNPq</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<p>O conhecimento sobre a produção cientifica de uma instituição de ensino superior possui um papel importante para determinar a qualidade da mesma, assim como responder a oportunidades dadas a mesma seja por editais de licitação ou projetos de pesquisa. Com essas informações é possível determinar os limites e competências da instituição. Uma forma de analisar essas características é através dos currículos de seus profissionais. </p>
+
+<p>Neste repositório está disponibilizado o código fonte da solução desenvolvida para trabalho de conclusão de curso de Bacharelado em Sistemas de Informação da Universidade da Região de Joinville – <a href="http://univille.edu.br">Univille</a> para coleta dessas informações curriculares dos professionais, usando como base os dados existentes na <a href="http://lattes.cnpq.br/">Plataforma Lattes</a> do CNPq. </p>
+
+<p>Ir para <a href="#execu%C3%A7%C3%A3o">Execução</a>.</p>
+
+<p>Ir para <a href="#instala%C3%A7%C3%A3o-e-configura%C3%A7%C3%A3o">Instalação e Configuração</a>.</p>
+
+<h2>
+<a id="conceito" class="anchor" href="#conceito" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conceito</h2>
+
+<p>Para acessar os dados dos currículos, <strong>utilizou-se o acesso disponibilizado pelo CNPq via VPN</strong> que através de um arquivo em formato XML, permite o consulta das informações dos currículos Lattes dos professores da instituição. </p>
+
+<p>Com base na documentação disponibilizada pelo CNPq, mapeou-se os dados presentes no XML e modelou-se uma base  <em>Data Warehouse</em> com os dados dos currículos, porém mais acessível para consulta. Por exemplo, todas as Produções Técnicas foram agrupadas em uma tabela que possui um identificador detalhando se esta produção é uma "Cultivar", "Patente", "Software", etc., o que facilita a leitura dos dados em comparação a estrutura hierárquica do XML. Este tipo de "remodelagem" foi aplicado a praticamente todas as tabelas de modo que a base se tornasse mais performática e legível. </p>
+
+<p>Outra informação importante incluída no <em>Data Warehouse</em>, foi das classificações dos periódicos do Qualis, criando a possibilidade de análise dos artigos gerados pela Instituição.</p>
+
+<p>Com a base modelada e acesso ao serviço do Lattes, foi desenvolvido um programa em C# para se comunicar com o serviço citado. A aplicação busca o currículo dos pesquisadores da IES e transforma os dados do XML para que possam ser gravados na Data Warehouse. </p>
+
+<p>A aplicação ainda avalia as informações das produções científicas e projetos dos professores para que não fiquem duplicadas na base de dados baseando-se no ano, tipo e título das mesmas. Dessa forma, caso dois pesquisadores tenham citado um mesmo projeto ou produção em seus currículos, ao invés de inserir dois registros o programa irá apenas vincular os dois pesquisadores ao um mesmo registro de produção/projeto. Para a produção bibliográfica também é associado qual o extrato Qualis o mesmo está classificado.</p>
+
+<p>Uma vez que os dados estejam carregados no DW utilizou-se a ferramenta de <em>Business Intelligence</em> <a href="http://www.tableau.com/">Tableau</a>, que permite a criação de paneis utilizando a base de dados construída anteriormente. No Tableau foram então criadas consultas e painéis para análise das informações geradas. O arquivo com os painéis gerados pode ser acessado <a href="AnaliseCurriculosLattes.twb">aqui</a>.</p>
+
+<p>A cada execução o extrator verifica se o currículo em questão sofreu alterações desde a última extração e irá carregar apenas os currículos que foram alterados, dessa forma torna a execução incremental e mais performática.</p>
+
+<h2>
+<a id="execução" class="anchor" href="#execu%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Execução</h2>
+
+<p>O LattesExtractor está preparado para ser executado de duas formas. </p>
+
+<p>A primeira não recebe parâmetros pela linha de comando e irá executar a extração dos Currículos na Plataforma Lattes conforme os <a href="#par%C3%A2metros-da-aplica%C3%A7%C3%A3o">Parâmetros da Aplicação</a>.</p>
+
+<p>A segunda forma recebe o parâmetro <code>-q</code> e o valor deverá ser o caminho para uma planilha com as informações sobre a Classificação Qualis dos Periódicos. Quando executado dessa forma o extrator irá alimentar e atualizar a classificação dos Periódicos. 
+Ex.: <code>LattesExtractor.exe -q qualis.csv</code></p>
+
+<p>Um exemplo de planilha pode ser encontrado em: <a href="LattesExtractor/resources/Consulta_Webqualis.csv">LattesExtractor/resources/Consulta_Webqualis.csv</a>.</p>
+
+<p>As novas classificações podem ser recuperadas na <a href="https://sucupira.capes.gov.br">Plataforma Sucupira</a> na área de consulta de dados para os "Periódicos Qualis" (<a href="https://sucupira.capes.gov.br/sucupira/public/consultas/coleta/veiculoPublicacaoQualis/listaConsultaGeralPeriodicos.jsf">clique aqui</a>). É importante avisar que a planilha gerada na Plataforma Sucupira precisara ser trabalhada antes do programa conseguir importá-la. Primeiramnete deve ser alterado o formato da mesma de Excel 2007 (.xls) para CSV (*.csv).</p>
+
+<p>E deverá ser alterado para que cada linha tenha apenas uma área de avaliação no caso a linha abaixo:</p>
+
+<table>
+<thead>
+<tr>
+<th>ISSN</th>
+<th>Título</th>
+<th>Área de Avaliação</th>
+<th>Estrato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1980-4814</td>
+<td>ABCustos (São Leopoldo, RS)</td>
+<td>ADMINISTRAÇÃO, CIÊNCIAS CONTÁBEIS E TURISMO</td>
+<td>B4</td>
+</tr>
+</tbody>
+</table>
+
+<p>Deve ficar assim:</p>
+
+<table>
+<thead>
+<tr>
+<th>ISSN</th>
+<th>Título</th>
+<th>Área de Avaliação</th>
+<th>Estrato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1980-4814</td>
+<td>ABCustos (São Leopoldo, RS)</td>
+<td>ADMINISTRAÇÃO</td>
+<td>B4</td>
+</tr>
+<tr>
+<td>1980-4814</td>
+<td>ABCustos (São Leopoldo, RS)</td>
+<td>CIÊNCIAS CONTÁBEIS E TURISMO</td>
+<td>B4</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="instalação-e-configuração" class="anchor" href="#instala%C3%A7%C3%A3o-e-configura%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instalação e Configuração</h2>
+
+<p>Para execução do extrator é necessário possuir acesso a VPN do CNPq, mais informações sobre como obtê-la é necessário conversar com um representante do CNPq.</p>
+
+<p>Também necessário um servidor de banco de dados para armazenar os dados gerados na extração, o mesmo deverá ser criado utilizando uma estrutura de tabelas que seja compatível com o extrator. No arquivo <a href="LattesExtractor/resources/dblattes_creation_script.sql">dblattes_creation_script.sql</a> existe um script T-SQL criando uma base de dados do SQL Server compatível.</p>
+
+<p>Existem dois arquivos de configuração, um deles para a extração de dados (<a href="LattesExtractor/App.config">App.config</a>) e outro para os logs (<a href="LattesExtractor/LattesExtractor.log4net">LattesExtractor.log4net</a>). Para a configuração sugerimos verificar diretamente com no site do Framework <a href="https://logging.apache.org/log4net/">Apache Log4Net</a> que foi utilizado para este fim.</p>
+
+<p>Abaixo seguem as configurações do <strong>LattesExtractor</strong>:</p>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a id="parâmetros-da-aplicação" class="anchor" href="#par%C3%A2metros-da-aplica%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Parâmetros da Aplicação</h3>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+<table>
+<thead>
+<tr>
+<th>Parâmetro</th>
+<th>Explicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TempDir</td>
+<td>Informar o diretório temporário onde serão guardados os arquivos XML dos currículos até que sejam lidos</td>
+</tr>
+<tr>
+<td>LattesCurriculumVitaeODBCConnection</td>
+<td>Linha de conexão ODBC para uma base de onde serão lidos quais são os pesquisadores da instituição.</td>
+</tr>
+<tr>
+<td>LattesCurriculumVitaeQuery</td>
+<td>Query SQL que irá retornar os dados a partir da conexão informada no parâmetro <em>LattesCurriculumVitaeODBCConnection</em>
+</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Sobre a Conexão ODBC:</strong> 
+Deve ser informada uma conexão ODBC válida, essa conexão pode ser feita com uma planilha Excel, por exemplo, usando o Jet.OLEDB, o valor do parâmetro ficaria: <code>"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=.\resources\IDs_Curriculos.local.xls; Extended Properties='Excel 8.0;HDR=YES;'"</code></p>
+
+<p><strong>Sobre a Query</strong></p>
+
+<p>A lógica do extrator está preparado para tratar 3 formatos de queries e define como lidar com elas de acordo com o número de colunas da query, recomenda-se utilizar a opção 2 para melhor performance.</p>
+
+<ul>
+<li>1 Coluna: Entende que esta sendo informado apenas o Número do Currículo Lattes do pesquisador. Ex.: <code>SELECT [numerolattes] FROM [lattes$]</code>
+</li>
+<li>2 Colunas: Entende que esta sendo informado o Número do Currículo Lattes e Nome do pesquisador, essa opção auxiliar na leitura do Log de execução. Ex.: <code>SELECT [numerolattes], [nomeprofessor] FROM [lattes$]</code>
+</li>
+<li>3 Colunas: O programa entende que são informados o Nome, Data de Nascimento e CPF do pesquisador, usando essa opção o LattesExtrator irá buscar sozinho o Número Lattes do pesquisador e retornar o currículo do mesmo. É uma opção útil caso não sejam conhecidos os números dos currículos do pesquisadores, mas irá tornar a execução um pouco mais lenta. Ex.: <code>SELECT [nomeprofessor], [datanascimento], [cpf] FROM [ids_lattes$]</code> </li>
+<li>4 Colunas: o programa entende que será informado o Número do Currículo Lattes, Nome, Data de Nascimento e CPF do pesquisador, sendo o número do currículo opcional, essa opção é útil caso tenha apenas partes do números dos currículos, dessa forma realizando uma consulta "mista". Ex.: <code>SELECT [numerolattes], [nomeprofessor], [datanascimento], [cpf] FROM [ids_lattes$]</code> </li>
+</ul>
 
 <h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
+<a id="parametrizando-webservice-cnpq" class="anchor" href="#parametrizando-webservice-cnpq" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Parametrizando WebService CNPq</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/#mentioning-users-and-teams" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>O CNPq disponibilizou um WebService SOAP que permite consultar os currículos dos pesquisadores e descobrir os Número Lattes dos mesmos. O endereço do mesmo pode mudar no futuro, caso isso aconteça, deve ser alterado essa informação para o WebService "WSCurriculo"</p>
 
 <h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a id="conexão-da-base-data-warehouse" class="anchor" href="#conex%C3%A3o-da-base-data-warehouse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conexão da Base <em>Data Warehouse</em>
+</h3>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+<p>A aplicação esta utilizando o <a href="https://msdn.microsoft.com/library/bb399567.aspx">Entity Framework</a> para conexão e manipulação do banco de dados. Para alterar o banco de destino dos dados basta alterar a <em>Connection String</em> de nome <em>LattesDatabase</em> no arquivo App.config.</p>
+
+<p>Hoje o extrator está preparado para usar o SQL Server como banco de dados de destino. Trocar para outro serviço precisará que sejam adicionadas outras bibliotecas fornecidas pelo seu serviço de banco de dados. </p>
+
+<h2>
+<a id="licença-e-distribuição" class="anchor" href="#licen%C3%A7a-e-distribui%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Licença e Distribuição</h2>
+
+<p>Veja o arquivo <a href="LattesExtractor/LICENSE">LICENSE</a> para verificar os limites e direitos de distribuição e uso (GNU GPL v3).</p>
         </section>
 
         <aside id="sidebar">
+          <a href="https://github.com/lucassabreu/ExtratorLattesCNPq/releases/download/v1.0/LattesExtractor.v1.0.zip" class="button">
+            <small>release v1.0</small>
+            arquivo .zip
+          </a>
           <a href="https://github.com/lucassabreu/ExtratorLattesCNPq/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
+            <small>fontes</small>
+            arquivo .zip
           </a>
           <a href="https://github.com/lucassabreu/ExtratorLattesCNPq/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
+            <small>fontes</small>
+            arquivo .tar.gz
           </a>
 
-          <p class="repo-owner"><a href="https://github.com/lucassabreu/ExtratorLattesCNPq"></a> is maintained by <a href="https://github.com/lucassabreu">lucassabreu</a>.</p>
+          <p class="repo-owner"><a href="https://github.com/lucassabreu/ExtratorLattesCNPq"></a> mantido por <a href="https://github.com/lucassabreu">lucassabreu</a>.</p>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+          <p>Esta página foi gerado por <a href="https://pages.github.com">GitHub Pages</a> usando uma variação do tema "Architect" de <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
         </aside>
       </div>
     </div>

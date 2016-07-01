@@ -423,7 +423,7 @@ table {
 
 td,
 th {
-  padding: 0;
+  padding: .5rem;
 }
 
 /* LAYOUT STYLES */
@@ -437,29 +437,29 @@ body {
 }
 
 p {
+  text-align: justify;
   margin-top: 0;
 }
 
 a {
-  color: #2879d0;
+  color: #9ab77e;
 }
 a:hover {
-  color: #2268b2;
+  color: #6e8657;
 }
 
 header {
   padding-top: 40px;
   padding-bottom: 40px;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   background: #2e7bcf url(../images/header-bg.jpg) 0 0 repeat-x;
-  border-bottom: solid 1px #275da1;
 }
 
 header h1 {
   width: 540px;
   margin-top: 0;
   margin-bottom: 0.2em;
-  font-size: 72px;
+  font-size: 50px;
   font-weight: normal;
   line-height: 1;
   color: #fff;
@@ -473,8 +473,42 @@ header h2 {
   font-size: 26px;
   font-weight: normal;
   line-height: 1.3;
-  color: #9ddcff;
+  color: #d0ffda;
   letter-spacing: 0;
+}
+
+header nav {
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: -.5rem;
+  border-top: .15rem dotted #d0ffda; 
+}
+
+header nav ul {
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li:first-child {
+  border: 0px;
+}
+
+header nav ul li {
+  display: inline-block;
+  border-left: .15rem dotted #a4ffb7;
+  float: left;
+  padding-top: .3rem;
+  padding-bottom: .3rem;
+  padding-right: .5rem;  
+  padding-left: .5rem;  
+}
+
+header nav a {
+  color: #d0ffda;
+}
+
+header nav a:hover {
+  color: #a4ffb7;
 }
 
 .inner {
@@ -521,7 +555,7 @@ a.button {
   height: 58px;
   padding-top: 22px;
   padding-left: 68px;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   font-size: 23px;
   line-height: 1.2;
   color: #fff;
@@ -541,8 +575,15 @@ aside a.button {
   width: 138px;
   padding-left: 64px;
   margin-bottom: 20px;
-  font-size: 21px;
-  background: transparent url(../images/download-button.png) 0 0 no-repeat;
+  font-size: .8rem;
+  background: #00ad84 url(../images/download-button.png) -10% center no-repeat;
+  background-size: 45%;
+  border: .2rem solid #dedede;
+  border-radius: .8rem;
+}
+
+aside a.button small {
+  font-size: 120%;
 }
 
 code, pre {
@@ -598,7 +639,8 @@ th {
 
 td {
   font-weight: 300;
-  text-align: center;
+  text-align: left;
+  vertical-align: top;
   border: 1px solid #ebebeb;
 }
 
@@ -614,7 +656,7 @@ form {
 #main-content h1 {
   margin-top: 0;
   margin-bottom: 0;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   font-size: 2.8em;
   font-weight: normal;
   color: #474747;
@@ -624,14 +666,14 @@ form {
 
 #main-content h1:before {
   padding-right: 0.3em;
-  margin-left: -0.9em;
-  color: #9ddcff;
+  margin-left: -1.5em;
+  color: #8cb168;
   content: "/";
 }
 
 #main-content h2 {
   margin-bottom: 8px;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   font-size: 22px;
   font-weight: bold;
   color: #474747;
@@ -639,15 +681,15 @@ form {
 }
 #main-content h2:before {
   padding-right: 0.3em;
-  margin-left: -1.5em;
+  margin-left: -2.1em;
   content: "//";
-  color: #9ddcff;
+  color: #8cb168;
 }
 
 #main-content h3 {
   margin-top: 24px;
   margin-bottom: 8px;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   font-size: 18px;
   font-weight: bold;
   color: #474747;
@@ -656,14 +698,14 @@ form {
 
 #main-content h3:before {
   padding-right: 0.3em;
-  margin-left: -2em;
+  margin-left: -2.5em;
   content: "///";
-  color: #9ddcff;
+  color: #8cb168;
 }
 
 #main-content h4 {
   margin-bottom: 8px;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   font-size: 15px;
   font-weight: bold;
   color: #474747;
@@ -674,12 +716,12 @@ h4:before {
   padding-right: 0.3em;
   margin-left: -2.8em;
   content: "////";
-  color: #9ddcff;
+  color: #8cb168;
 }
 
 #main-content h5 {
   margin-bottom: 8px;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   font-size: 14px;
   color: #474747;
   text-indent: 3px;
@@ -688,12 +730,12 @@ h5:before {
   padding-right: 0.3em;
   margin-left: -3.2em;
   content: "/////";
-  color: #9ddcff;
+  color: #8cb168;
 }
 
 #main-content h6 {
   margin-bottom: 8px;
-  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  font-family: monospace;
   font-size: .8em;
   color: #474747;
   text-indent: 3px;
@@ -702,7 +744,7 @@ h6:before {
   padding-right: 0.3em;
   margin-left: -3.7em;
   content: "//////";
-  color: #9ddcff;
+  color: #8cb168;
 }
 
 p {
@@ -825,6 +867,13 @@ footer a:hover {
   header h2 {
     font-size: 24px;
   }
+
+  header nav ul li {
+    float: none;
+    display: block;
+    border-left: 0px;
+  }
+
   header a.button {
     position: relative;
     display: inline-block;
@@ -834,9 +883,9 @@ footer a:hover {
     margin-top: 15px;
     font-size: 13px;
     line-height: 1;
-    color: #2879d0;
+    color: #ffffff;
     text-align: center;
-    background-color: #9ddcff;
+    background-color: #8cb168;
     background-image: none;
     border-radius: 5px;
     -moz-border-radius: 5px;
