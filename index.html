@@ -60,21 +60,23 @@
 
 <p>A aplicação ainda avalia as informações das produções científicas e projetos dos professores para que não fiquem duplicadas na base de dados baseando-se no ano, tipo e título das mesmas. Dessa forma, caso dois pesquisadores tenham citado um mesmo projeto ou produção em seus currículos, ao invés de inserir dois registros o programa irá apenas vincular os dois pesquisadores ao um mesmo registro de produção/projeto. Para a produção bibliográfica também é associado qual o extrato Qualis o mesmo está classificado.</p>
 
-<p>Uma vez que os dados estejam carregados no DW utilizou-se a ferramenta de <em>Business Intelligence</em> <a href="http://www.tableau.com/">Tableau</a>, que permite a criação de paneis utilizando a base de dados construída anteriormente. No Tableau foram então criadas consultas e painéis para análise das informações geradas. O arquivo com os painéis gerados pode ser acessado <a href="AnaliseCurriculosLattes.twb">aqui</a>.</p>
+<p>Uma vez que os dados estejam carregados no DW utilizou-se a ferramenta de <em>Business Intelligence</em> <a href="http://www.tableau.com/">Tableau</a>, que permite a criação de paneis utilizando a base de dados construída anteriormente. No Tableau foram então criadas consultas e painéis para análise das informações geradas. O arquivo com os painéis gerados pode ser acessado <a href="https://raw.githubusercontent.com/lucassabreu/ExtratorLattesCNPq/master/AnaliseCurriculosLattes.twb">aqui</a>.</p>
 
 <p>A cada execução o extrator verifica se o currículo em questão sofreu alterações desde a última extração e irá carregar apenas os currículos que foram alterados, dessa forma torna a execução incremental e mais performática.</p>
 
 <h2>
 <a id="execução" class="anchor" href="#execu%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Execução</h2>
 
-<p>O https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor está preparado para ser executado de duas formas. </p>
+<p>As atividades executadas pelo Lattes Extractor são definidas pelos parâmetros passados pela linha de comando de execução. Abaixo estão as formas disponíveis </p>
 
-<p>A primeira não recebe parâmetros pela linha de comando e irá executar a extração dos Currículos na Plataforma Lattes conforme os <a href="#par%C3%A2metros-da-aplica%C3%A7%C3%A3o">Parâmetros da Aplicação</a>.</p>
+<h3>Execução Normal (Sem Parâmetros)</h3>
+<p>Ao não informar parâmetros pela linha de comando o Lattes Extractor irá executar a extração dos Currículos da Plataforma Lattes conforme os <a href="#par%C3%A2metros-da-aplica%C3%A7%C3%A3o">Parâmetros da Aplicação</a>.</p>
 
-<p>A segunda forma recebe o parâmetro <code>-q</code> e o valor deverá ser o caminho para uma planilha com as informações sobre a Classificação Qualis dos Periódicos. Quando executado dessa forma o extrator irá alimentar e atualizar a classificação dos Periódicos. 
-Ex.: <code>https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor.exe -q qualis.csv</code></p>
+<h3>Carga dos Extratos de Periódicos Qualis (<code>-q</code>) </h3>
+<p>Para a carga do Extrato Periódicos Lattes é necessário passar o parâmetro <code>-q</code> e o valor deverá ser o caminho para uma planilha com as informações sobre a Classificação Qualis dos Periódicos. Quando executado dessa forma o extrator irá alimentar e atualizar a classificação dos Periódicos. 
+Ex.: <code>LattesExtractor.exe -q qualis.csv</code></p>
 
-<p>Um exemplo de planilha pode ser encontrado em: <a href="https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/resources/Consulta_Webqualis.csv">https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/resources/Consulta_Webqualis.csv</a>.</p>
+<p>Um exemplo de planilha pode ser encontrado em: <a href="https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/resources/Consulta_Webqualis.csv">LattesExtractor/resources/Consulta_Webqualis.csv</a>.</p>
 
 <p>As novas classificações podem ser recuperadas na <a href="https://sucupira.capes.gov.br">Plataforma Sucupira</a> na área de consulta de dados para os "Periódicos Qualis" (<a href="https://sucupira.capes.gov.br/sucupira/public/consultas/coleta/veiculoPublicacaoQualis/listaConsultaGeralPeriodicos.jsf">clique aqui</a>). É importante avisar que a planilha gerada na Plataforma Sucupira precisara ser trabalhada antes do programa conseguir importá-la. Primeiramnete deve ser alterado o formato da mesma de Excel 2007 (.xls) para CSV (*.csv).</p>
 
@@ -126,6 +128,39 @@ Ex.: <code>https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesE
 </tbody>
 </table>
 
+<h3>JCR Impact Factor (<code>-j</code>)</h3>
+
+<p>Nesta execução é possível realizar a atualização do <a href="http://thomsonreuters.com/en/products-services/scholarly-scientific-research/research-management-and-evaluation/journal-citation-reports.html">JCR Impact Factor</a> dentro da base de consulta, para tanto é necessário usar o parâmetro <code>-j</code> passando como valor o arquivo CSV que é disponibilizado pela <a href="http://thomsonreuters.com/">Thomson Reuters</a>, abaixo será explicado como exportar esse arquivo e quais são as informações que devem ser exportadas para correta execução do LattesExtractor.</p>
+
+<p><strong>Para executar os passos abaixo é necessário estar dentro da VPN da Capes, do contrário o acesso a base poderá estar limitada e não será possível terminar o processo abaixo.</strong>></p>
+
+<ol>
+  <li>
+    <p>Acesse o Portal de Periódicos da Capes (<a href="http://periodicos.capes.gov.br/">http://periodicos.capes.gov.br/</a>), na seção de "Base" pesquisar o termo "JCR" e clicar em "Enviar".</p>
+    <p><img src="images/pesquisa-capes.png" 
+          alt="Imagem da tela de pesquisa do Portal de Períodicos Capes com o termo &quot;JCR&quot; sendo pesquisado."
+          title="Imagem da tela de pesquisa do Portal de Períodicos Capes com o termo &quot;JCR&quot; sendo pesquisado." /></p>
+  </li>
+  <li>
+    <p>Nos resultados da pesquisa acessar o link "JCR – Journal Citation Reports (Thomson Reuters)"</p>
+    <p><img src="images/resultado-capes.png" 
+          alt="Imagem da tela de resultados do Portal de Períodicos Capes para o termo &quot;JCR – Journal Citation Reports (Thomson Reuters / InCites)&quot;."
+          title="Imagem da tela de resultados do Portal de Períodicos Capes para o termo &quot;JCR – Journal Citation Reports (Thomson Reuters / InCites)&quot;." /></p>
+  </li>
+  <li>
+    <p>Será apresentada um painel contendo os dados do JCR, nesta tela é importante utilizar o botão "Customize Indicators" e selecionar todas as opções disponíveis. Caso seja solicato o Login no sistema basta criar um novo registro o mesmo é gratuito.</p>
+    <p><img src="images/customize-indicators.png" 
+          alt="Imagem da tela customização de indicadores, onde todos as opções estão selecionadas."
+          title="Imagem da tela customização de indicadores, onde todos as opções estão selecionadas." /></p>
+  </li>
+  <li>
+    <p>Após o painel ter atualizado usar o botão de Download para exportar os dados em formato CSV. O arquivo exportado pode ser usado diretamente para importação no Lattes Extractor.</p>
+    <p><img src="images/download-csv-jcr.png"
+          alt="Tela destacando as opções de download do painel"
+          title="Tela destacando as opções de download do painel" /></p>
+  </li>
+</ol>
+
 <h2>
 <a id="instalação-e-configuração" class="anchor" href="#instala%C3%A7%C3%A3o-e-configura%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instalação e Configuração</h2>
 
@@ -133,9 +168,9 @@ Ex.: <code>https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesE
 
 <p>Também necessário um servidor de banco de dados para armazenar os dados gerados na extração, o mesmo deverá ser criado utilizando uma estrutura de tabelas que seja compatível com o extrator. No arquivo <a href="https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/resources/dblattes_creation_script.sql">dblattes_creation_script.sql</a> existe um script T-SQL criando uma base de dados do SQL Server compatível.</p>
 
-<p>Existem dois arquivos de configuração, um deles para a extração de dados (<a href="https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/App.config">App.config</a>) e outro para os logs (<a href="https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor.log4net">https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor.log4net</a>). Para a configuração sugerimos verificar diretamente com no site do Framework <a href="https://logging.apache.org/log4net/">Apache Log4Net</a> que foi utilizado para este fim.</p>
+<p>Existem dois arquivos de configuração, um deles para a extração de dados (<a href="https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/App.config">App.config</a>) e outro para os logs (<a href="https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor/LattesExtractor.log4net">LattesExtractor.log4net</a>). Para a configuração sugerimos verificar diretamente com no site do Framework <a href="https://logging.apache.org/log4net/">Apache Log4Net</a> que foi utilizado para este fim.</p>
 
-<p>Abaixo seguem as configurações do <strong>https://github.com/lucassabreu/ExtratorLattesCNPq/blob/master/LattesExtractor</strong>:</p>
+<p>Abaixo seguem as configurações do <strong>LattesExtractor</strong>:</p>
 
 <h3>
 <a id="parâmetros-da-aplicação" class="anchor" href="#par%C3%A2metros-da-aplica%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Parâmetros da Aplicação</h3>

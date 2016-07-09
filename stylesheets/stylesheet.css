@@ -133,7 +133,7 @@ dfn {
  */
 
 h1 {
-  margin: 0.67em 0;
+  margin: 1.60em 0;
   font-size: 2em;
 }
 
@@ -594,7 +594,7 @@ code, pre {
 }
 
 code {
-  padding: 0 3px;
+  padding: 3px 3px;
   background-color: #f2f8fc;
   border: solid 1px #dbe7f3;
 }
@@ -666,7 +666,7 @@ form {
 
 #main-content h1:before {
   padding-right: 0.3em;
-  margin-left: -1.5em;
+  margin-left: -1.55em;
   color: #8cb168;
   content: "/";
 }
@@ -681,7 +681,7 @@ form {
 }
 #main-content h2:before {
   padding-right: 0.3em;
-  margin-left: -2.1em;
+  margin-left: -2.15em;
   content: "//";
   color: #8cb168;
 }
@@ -697,7 +697,7 @@ form {
 }
 
 #main-content h3:before {
-  padding-right: 0.3em;
+  padding-right: 0.35em;
   margin-left: -2.5em;
   content: "///";
   color: #8cb168;
@@ -714,7 +714,7 @@ form {
 
 h4:before {
   padding-right: 0.3em;
-  margin-left: -2.8em;
+  margin-left: -2.85em;
   content: "////";
   color: #8cb168;
 }
@@ -757,6 +757,11 @@ a {
 
 p a {
   font-weight: 400;
+}
+
+p img {
+  display: block;
+  margin: auto;
 }
 
 blockquote {
