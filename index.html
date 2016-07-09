@@ -175,34 +175,19 @@ Ex.: <code>LattesExtractor.exe -q qualis.csv</code></p>
 <h3>
 <a id="parâmetros-da-aplicação" class="anchor" href="#par%C3%A2metros-da-aplica%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Parâmetros da Aplicação</h3>
 
-<table>
-<thead>
-<tr>
-<th>Parâmetro</th>
-<th>Explicação</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TempDir</td>
-<td>Informar o diretório temporário onde serão guardados os arquivos XML dos currículos até que sejam lidos</td>
-</tr>
-<tr>
-<td>LattesCurriculumVitaeODBCConnection</td>
-<td>Linha de conexão ODBC para uma base de onde serão lidos quais são os pesquisadores da instituição.</td>
-</tr>
-<tr>
-<td>LattesCurriculumVitaeQuery</td>
-<td>Query SQL que irá retornar os dados a partir da conexão informada no parâmetro <em>LattesCurriculumVitaeODBCConnection</em>
-</td>
-</tr>
-</tbody>
-</table>
+<h4>TempDir</h4>
+<p>Informar o diretório temporário onde serão guardados os arquivos XML dos currículos até que sejam lidos</p>
 
-<p><strong>Sobre a Conexão ODBC:</strong> 
-Deve ser informada uma conexão ODBC válida, essa conexão pode ser feita com uma planilha Excel, por exemplo, usando o Jet.OLEDB, o valor do parâmetro ficaria: <code>"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=.\resources\IDs_Curriculos.local.xls; Extended Properties='Excel 8.0;HDR=YES;'"</code></p>
+<h4>LattesCurriculumVitaeODBCConnection</h4>
 
-<p><strong>Sobre a Query</strong></p>
+<p>Linha de conexão ODBC para uma base de onde serão lidos quais são os pesquisadores da instituição.</p>
+
+<p>Essa conexão pode ser feita com uma planilha Excel, por exemplo, usando o Jet.OLEDB, o valor do parâmetro ficaria:</p> 
+  <p><code>"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=.\resources\IDs_Curriculos.local.xls; Extended Properties='Excel 8.0;HDR=YES;'"</code></p>
+
+<h4>LattesCurriculumVitaeQuery</h4>
+
+<p>Query SQL que irá retornar os dados a partir da conexão informada no parâmetro <em>LattesCurriculumVitaeODBCConnection</em></p>
 
 <p>A lógica do extrator está preparado para tratar 3 formatos de queries e define como lidar com elas de acordo com o número de colunas da query, recomenda-se utilizar a opção 2 para melhor performance.</p>
 
